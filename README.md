@@ -135,6 +135,8 @@ Quando um pedido de auxílio for respondido, o aluno deve receber um e-mail da p
 
 ### Run
 
+Configure suas váriaveis de ambiente `.env` a partir do arquivo [.env.example](.env.example)
+
 ```bash
 # using yarn
 yarn dev:debug
