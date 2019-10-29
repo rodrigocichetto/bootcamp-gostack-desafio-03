@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+
+  database:
+    image: "postgres:11"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=gympoint
+    volumes:
+      - ./.docker/postgres/data:/var/lib/postgresql/data
