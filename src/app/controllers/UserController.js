@@ -25,13 +25,12 @@ class UserController {
       return res.status(400).json({ error: 'User already exists' });
     }
 
-    const { id, name, email, provider } = await User.create(req.body);
+    const { id, name, email } = await User.create(req.body);
 
     return res.json({
       id,
       name,
       email,
-      provider,
     });
   }
 
@@ -54,17 +53,9 @@ class UserController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
-    const { email, oldPassword } = req.body;
+    const { email, oldPassword, avatar_id } = req.body;
 
-    const user = await User.findByPk(req.userId, {
-      include: [
-        {
-          model: File,
-          as: 'avatar',
-          attributes: ['name', 'path', 'url'],
-        },
-      ],
-    });
+    const user = await User.findByPk(req.userId);
 
     if (email !== user.email) {
       const userExists = await User.findOne({ where: { email } });
@@ -78,13 +69,20 @@ class UserController {
       return res.status(401).json({ error: 'Password does not match' });
     }
 
-    const { id, name, provider, avatar } = await user.update(req.body);
+    const avatar = await File.findByPk(avatar_id, {
+      attributes: ['name', 'path', 'url'],
+    });
+
+    if (!avatar) {
+      return res.status(400).json({ error: 'Avatar not found' });
+    }
+
+    const { id, name } = await user.update(req.body);
 
     return res.json({
       id,
       name,
       email,
-      provider,
       avatar,
     });
   }
