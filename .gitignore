@@ -3,4 +3,4 @@ package-lock.json
 yarn.lock
 .docker
 .env
-tmp/uploads/*
+./tmp/uploads/*
