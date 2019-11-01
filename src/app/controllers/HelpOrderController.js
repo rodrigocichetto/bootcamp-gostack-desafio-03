@@ -5,7 +5,11 @@ import Student from '../models/Student';
 
 class HelpOrderController {
   async index(req, res) {
+    const { page = 1 } = req.query;
+
     const helpOrders = await HelpOrder.findAll({
+      limit: 20,
+      offset: (page - 1) * 20,
       where: {
         answer: null,
       },
@@ -21,7 +25,11 @@ class HelpOrderController {
   }
 
   async show(req, res) {
+    const { page = 1 } = req.query;
+
     const helpOrders = await HelpOrder.findAll({
+      limit: 20,
+      offset: (page - 1) * 20,
       where: {
         student_id: req.params.id,
       },

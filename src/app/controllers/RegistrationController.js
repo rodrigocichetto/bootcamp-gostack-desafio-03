@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { startOfDay, endOfDay, addMonths, parseISO } from 'date-fns';
+import { startOfDay, endOfDay, addMonths, parseISO, isBefore } from 'date-fns';
 
 import Registration from '../models/Registration';
 import Plan from '../models/Plan';
@@ -7,7 +7,11 @@ import Student from '../models/Student';
 
 class RegistrationController {
   async index(req, res) {
+    const { page = 1 } = req.query;
+
     const registrations = await Registration.findAll({
+      limit: 20,
+      offset: (page - 1) * 20,
       attributes: ['id', 'start_date', 'end_date', 'price'],
       include: [
         {
@@ -21,16 +25,14 @@ class RegistrationController {
           attributes: ['name', 'email', 'age', 'weight', 'height'],
         },
       ],
+      order: [['start_date', 'DESC']],
     });
 
     return res.json(registrations);
   }
 
   async show(req, res) {
-    const registrations = await Registration.findAll({
-      where: {
-        id: req.params.id,
-      },
+    const registration = await Registration.findByPk(req.params.id, {
       attributes: ['id', 'start_date', 'end_date', 'price'],
       include: [
         {
@@ -46,11 +48,11 @@ class RegistrationController {
       ],
     });
 
-    if (!registrations.length) {
+    if (!registration) {
       return res.status(400).json({ error: 'Registration not found' });
     }
 
-    return res.json(registrations);
+    return res.json(registration);
   }
 
   async store(req, res) {
@@ -61,13 +63,17 @@ class RegistrationController {
       plan_id: Yup.number()
         .required()
         .min(0),
-      start_date: Yup.date()
-        .required()
-        .min(startOfDay(new Date())),
+      start_date: Yup.date().required(),
     });
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const parsedDate = parseISO(req.body.start_date);
+
+    if (isBefore(parsedDate, startOfDay(new Date()))) {
+      return res.status(400).json({ error: 'Past dates are not permitted' });
     }
 
     const student = await Student.findByPk(req.body.student_id, {
@@ -88,9 +94,7 @@ class RegistrationController {
 
     const { id, start_date, end_date, price } = await Registration.create({
       ...req.body,
-      end_date: endOfDay(
-        addMonths(parseISO(req.body.start_date), plan.duration)
-      ),
+      end_date: endOfDay(addMonths(parsedDate, plan.duration)),
       price: plan.duration * plan.price,
     });
 
@@ -108,11 +112,17 @@ class RegistrationController {
     const schema = Yup.object().shape({
       student_id: Yup.number().min(0),
       plan_id: Yup.number().min(0),
-      start_date: Yup.date().min(startOfDay(new Date())),
+      start_date: Yup.date(),
     });
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const parsedDate = parseISO(req.body.start_date);
+
+    if (isBefore(parsedDate, startOfDay(new Date()))) {
+      return res.status(400).json({ error: 'Past dates are not permitted' });
     }
 
     const registration = await Registration.findByPk(req.params.id, {
@@ -136,13 +146,13 @@ class RegistrationController {
 
     if (
       req.body.start_date &&
-      startOfDay(parseISO(req.body.start_date)) !== registration.start_date
+      startOfDay(parsedDate) !== registration.start_date
     ) {
       registration.start_date = req.body.start_date;
 
       if (!req.body.plan_id) {
         registration.end_date = endOfDay(
-          addMonths(parseISO(req.body.start_date), registration.plan.duration)
+          addMonths(parsedDate, registration.plan.duration)
         );
       }
     }
