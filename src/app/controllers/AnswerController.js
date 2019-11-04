@@ -1,5 +1,8 @@
 import * as Yup from 'yup';
 
+import Queue from '../../lib/Queue';
+import AnswerMail from '../jobs/AnswerMail';
+
 import HelpOrder from '../models/HelpOrder';
 import Student from '../models/Student';
 
@@ -28,6 +31,12 @@ class HelpOrderController {
     const { id, student, question, answer, answer_at } = await helpOrder.update(
       { ...req.body, answer_at: new Date() }
     );
+
+    Queue.add(AnswerMail.key, {
+      student,
+      question,
+      answer,
+    });
 
     return res.json({
       id,
