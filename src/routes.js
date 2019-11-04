@@ -14,6 +14,7 @@ import RegistrationController from './app/controllers/RegistrationController';
 import HelpOrderController from './app/controllers/HelpOrderController';
 import AnswerController from './app/controllers/AnswerController';
 import NotificationController from './app/controllers/NotificationController';
+import CheckinController from './app/controllers/CheckinController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -23,6 +24,8 @@ routes.post('/sessions', SessionController.store);
 
 routes.get('/students/:id/help-orders', HelpOrderController.show);
 routes.post('/students/:id/help-orders', HelpOrderController.store);
+routes.post('/students/:id/checkins', CheckinController.store);
+routes.get('/students/:id/checkins', CheckinController.index);
 
 routes.use(authMiddleware);
 
