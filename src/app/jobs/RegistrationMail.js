@@ -13,7 +13,7 @@ class RegistrationMail {
 
     await Mail.sendMail({
       to: `${student.name} <${student.email}>`,
-      subject: 'Matricula realizada com sucesso!',
+      subject: 'Matrícula realizada com sucesso!',
       template: 'registration',
       context: {
         student,

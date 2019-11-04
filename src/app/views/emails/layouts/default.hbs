@@ -1,4 +1,29 @@
-<div style="font-family: Arial, Helvetica, sans-serif; font-size: 16px; line-height: 1.6; color: #222; max-width: 600px">
-  {{{ body }}}
-  {{> footer }}
+<div style="background: #f5f5f5; margin: 0; padding: 0;">
+  <div
+    style="
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #222;
+      width: 600px;
+      display: table;
+      margin: 0 auto;
+      text-align: center;
+      padding: 30px 0;">
+
+    <img src="https://github.com/rodrigocichetto/bootcamp-gostack-desafio-03/blob/master/.github/logo.png?raw=true"
+      alt="Gympoint - Academia" style="display: block; margin: 0 auto;" />
+
+    {{> gymnasts }}
+
+    {{{ body }}}
+
+    <hr style="margin: 10px 0;">
+    <div style="display: flex; align-items: center; justify-content: center;">
+      <img src="https://github.com/rodrigocichetto/bootcamp-gostack-desafio-03/blob/master/.github/gym.png?raw=true"
+      alt="Gympoint - Academia" style="margin-right: 20px;" />
+      Equipe Gympoint
+    </div>
+
+  </div>
 </div>

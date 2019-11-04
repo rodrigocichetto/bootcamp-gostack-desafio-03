@@ -1,2 +1,9 @@
-<strong>Olá, {{ student.name }} </strong>
-<p>Você realizou a sua matricula na Gympoint com sucesso ;D</p>
+<strong>Olá, <span style="color: #EE4D64">{{ student.name }}</span></strong>
+<p>
+  Você realizou a sua matricula na Gympoint com sucesso no plano <strong style="color: #EE4D64">{{ plan.name }}</strong> ;D
+</p>
+<p>
+  <strong>Data de início informada:</strong> {{ start_date }} <br>
+  <strong>Data de término calculada:</strong> {{ end_date }} <br>
+  <strong>Preço calculado:</strong> R$ {{ price }} <br>
+</p>
