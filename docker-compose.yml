@@ -19,3 +19,10 @@ services:
       - "27017:27017"
     volumes:
       - ./.docker/mongo/data:/data/db
+
+  redis:
+    image: "redis:5-alpine"
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./.docker/redis/data:/data
