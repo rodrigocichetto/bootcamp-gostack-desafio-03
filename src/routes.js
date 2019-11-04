@@ -13,6 +13,7 @@ import FileController from './app/controllers/FileController';
 import RegistrationController from './app/controllers/RegistrationController';
 import HelpOrderController from './app/controllers/HelpOrderController';
 import AnswerController from './app/controllers/AnswerController';
+import NotificationController from './app/controllers/NotificationController';
 
 const routes = new Router();
 const upload = multer(multerConfig);
@@ -43,5 +44,8 @@ routes.get('/plans', PlanController.index);
 routes.post('/plans', PlanController.store);
 routes.put('/plans/:id', PlanController.update);
 routes.delete('/plans/:id', PlanController.delete);
+
+routes.get('/notifications', NotificationController.index);
+routes.put('/notifications/:id', NotificationController.update);
 
 export default routes;

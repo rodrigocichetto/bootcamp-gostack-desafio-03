@@ -1,6 +1,8 @@
 import * as Yup from 'yup';
 import { startOfDay, endOfDay, addMonths, parseISO, isBefore } from 'date-fns';
 
+import Mail from '../../lib/Mail';
+
 import Registration from '../models/Registration';
 import Plan from '../models/Plan';
 import Student from '../models/Student';
@@ -96,6 +98,19 @@ class RegistrationController {
       ...req.body,
       end_date: endOfDay(addMonths(parsedDate, plan.duration)),
       price: plan.duration * plan.price,
+    });
+
+    Mail.sendMail({
+      to: `${student.name} <${student.email}>`,
+      subject: 'Matricula realizada com sucesso!',
+      template: 'registration',
+      context: {
+        student,
+        plan,
+        start_date,
+        end_date,
+        price,
+      },
     });
 
     return res.json({
