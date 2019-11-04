@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 
 import Mail from '../../lib/Mail';
@@ -18,9 +18,9 @@ class RegistrationMail {
       context: {
         student,
         plan,
-        start_date,
-        end_date,
-        price,
+        start_date: format(parseISO(start_date), 'dd/MMM/yyyy'),
+        end_date: format(parseISO(end_date), 'dd/MMM/yyyy HH:mm'),
+        price: price.toFixed(2),
       },
     });
   }
