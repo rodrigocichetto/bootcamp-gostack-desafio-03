@@ -36,7 +36,7 @@ class CheckinController {
       },
     });
 
-    if (!registration) {
+    if (!registration.length) {
       return res.status(401).json({ error: 'Student not registred' });
     }
 
