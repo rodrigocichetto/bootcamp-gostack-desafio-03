@@ -1,9 +1,9 @@
-import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import { startOfWeek, endOfWeek } from 'date-fns';
 
 import Checkin from '../models/Checkin';
-import Student from '../models/User';
+import Student from '../models/Student';
+import Registration from '../models/Registration';
 
 class CheckinController {
   async index(req, res) {
@@ -28,6 +28,16 @@ class CheckinController {
 
     if (!student) {
       return res.status(401).json({ error: 'Student not found' });
+    }
+
+    const registration = await Registration.findAll({
+      where: {
+        student_id,
+      },
+    });
+
+    if (!registration) {
+      return res.status(401).json({ error: 'Student not registred' });
     }
 
     const today = new Date();
