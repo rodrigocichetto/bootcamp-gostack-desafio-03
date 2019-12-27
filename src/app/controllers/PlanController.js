@@ -2,13 +2,15 @@ import * as Yup from 'yup';
 
 import Plan from '../models/Plan';
 
+import { PAGINATION_LIMIT } from '../../config/constants';
+
 class PlanController {
   async index(req, res) {
     const { page = 1 } = req.query;
 
     const plans = await Plan.findAll({
-      limit: 20,
-      offset: (page - 1) * 20,
+      limit: PAGINATION_LIMIT,
+      offset: (page - 1) * PAGINATION_LIMIT,
     });
 
     return res.json(plans);

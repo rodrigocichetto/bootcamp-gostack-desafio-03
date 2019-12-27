@@ -3,13 +3,15 @@ import * as Yup from 'yup';
 import HelpOrder from '../models/HelpOrder';
 import Student from '../models/Student';
 
+import { PAGINATION_LIMIT } from '../../config/constants';
+
 class HelpOrderController {
   async index(req, res) {
     const { page = 1 } = req.query;
 
     const helpOrders = await HelpOrder.findAll({
-      limit: 20,
-      offset: (page - 1) * 20,
+      limit: PAGINATION_LIMIT,
+      offset: (page - 1) * PAGINATION_LIMIT,
       where: {
         answer: null,
       },
@@ -28,8 +30,8 @@ class HelpOrderController {
     const { page = 1 } = req.query;
 
     const helpOrders = await HelpOrder.findAll({
-      limit: 20,
-      offset: (page - 1) * 20,
+      limit: PAGINATION_LIMIT,
+      offset: (page - 1) * PAGINATION_LIMIT,
       where: {
         student_id: req.params.id,
       },

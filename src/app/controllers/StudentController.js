@@ -2,7 +2,33 @@ import * as Yup from 'yup';
 
 import Student from '../models/Student';
 
+import { PAGINATION_LIMIT } from '../../config/constants';
+
 class StudentController {
+  async index(req, res) {
+    const { page = 1 } = req.query;
+
+    const students = await Student.findAndCountAll({
+      limit: PAGINATION_LIMIT,
+      offset: (page - 1) * PAGINATION_LIMIT,
+    });
+
+    return res.json({
+      students: students.rows,
+      pages: parseInt(students.count / PAGINATION_LIMIT, 10),
+    });
+  }
+
+  async show(req, res) {
+    const student = await Student.findByPk(req.params.id);
+
+    if (!student) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    return res.json(student);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),

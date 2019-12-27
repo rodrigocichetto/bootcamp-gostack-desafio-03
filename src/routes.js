@@ -31,7 +31,10 @@ routes.use(authMiddleware);
 
 routes.post('/files', upload.single('file'), FileController.store);
 routes.put('/users', UserController.update);
+
+routes.get('/students', StudentsController.index);
 routes.post('/students', StudentsController.store);
+routes.get('/students/:id', StudentsController.show);
 routes.put('/students/:id', StudentsController.update);
 
 routes.get('/help-orders', HelpOrderController.index);
