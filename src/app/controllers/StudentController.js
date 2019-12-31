@@ -11,11 +11,12 @@ class StudentController {
     const students = await Student.findAndCountAll({
       limit: PAGINATION_LIMIT,
       offset: (page - 1) * PAGINATION_LIMIT,
+      order: [['id', 'ASC'], ['name', 'ASC']],
     });
 
     return res.json({
       students: students.rows,
-      pages: parseInt(students.count / PAGINATION_LIMIT, 10),
+      pages: Math.ceil(students.count / PAGINATION_LIMIT),
     });
   }
 
@@ -111,6 +112,18 @@ class StudentController {
       weight,
       height,
     });
+  }
+
+  async delete(req, res) {
+    const student = await Student.findByPk(req.params.id);
+
+    if (!student) {
+      return res.status(400).json({ error: 'Student not found' });
+    }
+
+    await student.destroy();
+
+    return res.json(student);
   }
 }
 
