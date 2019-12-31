@@ -17,7 +17,7 @@ class RegistrationController {
     const registrations = await Registration.findAll({
       limit: PAGINATION_LIMIT,
       offset: (page - 1) * PAGINATION_LIMIT,
-      attributes: ['id', 'start_date', 'end_date', 'price'],
+      attributes: ['id', 'start_date', 'end_date', 'price', 'active'],
       include: [
         {
           model: Plan,
