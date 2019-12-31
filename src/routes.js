@@ -7,7 +7,7 @@ import authMiddleware from './app/middlewares/auth';
 
 import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
-import StudentsController from './app/controllers/StudentController';
+import StudentController from './app/controllers/StudentController';
 import PlanController from './app/controllers/PlanController';
 import FileController from './app/controllers/FileController';
 import RegistrationController from './app/controllers/RegistrationController';
@@ -32,11 +32,11 @@ routes.use(authMiddleware);
 routes.post('/files', upload.single('file'), FileController.store);
 routes.put('/users', UserController.update);
 
-routes.get('/students', StudentsController.index);
-routes.post('/students', StudentsController.store);
-routes.get('/students/:id', StudentsController.show);
-routes.put('/students/:id', StudentsController.update);
-routes.delete('/students/:id', StudentsController.delete);
+routes.get('/students', StudentController.index);
+routes.post('/students', StudentController.store);
+routes.get('/students/:id', StudentController.show);
+routes.put('/students/:id', StudentController.update);
+routes.delete('/students/:id', StudentController.delete);
 
 routes.get('/help-orders', HelpOrderController.index);
 routes.post('/help-orders/:id/answer', AnswerController.store);
@@ -49,6 +49,7 @@ routes.delete('/registrations/:id', RegistrationController.delete);
 
 routes.get('/plans', PlanController.index);
 routes.post('/plans', PlanController.store);
+routes.get('/plans/:id', PlanController.show);
 routes.put('/plans/:id', PlanController.update);
 routes.delete('/plans/:id', PlanController.delete);
 

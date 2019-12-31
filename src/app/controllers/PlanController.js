@@ -8,12 +8,26 @@ class PlanController {
   async index(req, res) {
     const { page = 1 } = req.query;
 
-    const plans = await Plan.findAll({
+    const plans = await Plan.findAndCountAll({
       limit: PAGINATION_LIMIT,
       offset: (page - 1) * PAGINATION_LIMIT,
+      order: [['id', 'ASC']],
     });
 
-    return res.json(plans);
+    return res.json({
+      plans: plans.rows,
+      pages: Math.ceil(plans.count / PAGINATION_LIMIT),
+    });
+  }
+
+  async show(req, res) {
+    const plan = await Plan.findByPk(req.params.id);
+
+    if (!plan) {
+      return res.status(404).json({ error: 'Plan not found' });
+    }
+
+    return res.json(plan);
   }
 
   async store(req, res) {

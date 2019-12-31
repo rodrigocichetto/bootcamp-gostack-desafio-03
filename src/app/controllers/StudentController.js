@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import * as Yup from 'yup';
 
 import Student from '../models/Student';
@@ -6,12 +7,13 @@ import { PAGINATION_LIMIT } from '../../config/constants';
 
 class StudentController {
   async index(req, res) {
-    const { page = 1 } = req.query;
+    const { page = 1, q: query = '' } = req.query;
 
     const students = await Student.findAndCountAll({
       limit: PAGINATION_LIMIT,
       offset: (page - 1) * PAGINATION_LIMIT,
-      order: [['id', 'ASC'], ['name', 'ASC']],
+      order: [['id', 'DESC']],
+      where: { name: { [Op.like]: `%${query}%` } },
     });
 
     return res.json({
