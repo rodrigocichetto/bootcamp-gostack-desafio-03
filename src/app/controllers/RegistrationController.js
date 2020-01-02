@@ -14,7 +14,7 @@ class RegistrationController {
   async index(req, res) {
     const { page = 1 } = req.query;
 
-    const registrations = await Registration.findAll({
+    const registrations = await Registration.findAndCountAll({
       limit: PAGINATION_LIMIT,
       offset: (page - 1) * PAGINATION_LIMIT,
       attributes: ['id', 'start_date', 'end_date', 'price', 'active'],
@@ -33,7 +33,10 @@ class RegistrationController {
       order: [['start_date', 'DESC']],
     });
 
-    return res.json(registrations);
+    return res.json({
+      registrations: registrations.rows,
+      pages: Math.ceil(registrations.count / PAGINATION_LIMIT),
+    });
   }
 
   async show(req, res) {
