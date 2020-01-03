@@ -28,9 +28,13 @@ class HelpOrderController {
       return res.status(400).json({ error: 'Help order not found' });
     }
 
-    const { id, student, question, answer, answer_at } = await helpOrder.update(
-      { ...req.body, answer_at: new Date() }
-    );
+    const {
+      id,
+      student,
+      question,
+      answer,
+      answer_at,
+    } = await helpOrder.update({ ...req.body, answer_at: new Date() });
 
     Queue.add(AnswerMail.key, {
       student,

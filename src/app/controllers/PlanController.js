@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import * as Yup from 'yup';
 
 import Plan from '../models/Plan';
@@ -6,12 +7,13 @@ import { PAGINATION_LIMIT } from '../../config/constants';
 
 class PlanController {
   async index(req, res) {
-    const { page = 1 } = req.query;
+    const { page = 1, q: query = '' } = req.query;
 
     const plans = await Plan.findAndCountAll({
       limit: PAGINATION_LIMIT,
       offset: (page - 1) * PAGINATION_LIMIT,
       order: [['id', 'ASC']],
+      where: { title: { [Op.like]: `%${query}%` } },
     });
 
     return res.json({

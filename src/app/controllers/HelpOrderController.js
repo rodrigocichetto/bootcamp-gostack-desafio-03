@@ -9,7 +9,7 @@ class HelpOrderController {
   async index(req, res) {
     const { page = 1 } = req.query;
 
-    const helpOrders = await HelpOrder.findAll({
+    const helpOrders = await HelpOrder.findAndCountAll({
       limit: PAGINATION_LIMIT,
       offset: (page - 1) * PAGINATION_LIMIT,
       where: {
@@ -21,9 +21,13 @@ class HelpOrderController {
         as: 'student',
         attributes: ['name', 'email'],
       },
+      order: [['id', 'DESC']],
     });
 
-    return res.json(helpOrders);
+    return res.json({
+      help_orders: helpOrders.rows,
+      pages: Math.ceil(helpOrders.count / PAGINATION_LIMIT),
+    });
   }
 
   async show(req, res) {

@@ -22,12 +22,10 @@ class RegistrationController {
         {
           model: Plan,
           as: 'plan',
-          attributes: ['title', 'duration', 'price'],
         },
         {
           model: Student,
           as: 'student',
-          attributes: ['name', 'email', 'age', 'weight', 'height'],
         },
       ],
       order: [['start_date', 'DESC']],
@@ -46,12 +44,10 @@ class RegistrationController {
         {
           model: Plan,
           as: 'plan',
-          attributes: ['title', 'duration', 'price'],
         },
         {
           model: Student,
           as: 'student',
-          attributes: ['name', 'email', 'age', 'weight', 'height'],
         },
       ],
     });
@@ -166,11 +162,9 @@ class RegistrationController {
     ) {
       registration.start_date = req.body.start_date;
 
-      if (!req.body.plan_id) {
-        registration.end_date = endOfDay(
-          addMonths(parsedDate, registration.plan.duration)
-        );
-      }
+      registration.end_date = endOfDay(
+        addMonths(parsedDate, registration.plan.duration)
+      );
     }
 
     if (req.body.plan_id && req.body.plan_id !== registration.plan_id) {
