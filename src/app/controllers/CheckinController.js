@@ -5,19 +5,26 @@ import Checkin from '../models/Checkin';
 import Student from '../models/Student';
 import Registration from '../models/Registration';
 
+import { PAGINATION_LIMIT } from '../../config/constants';
+
 class CheckinController {
   async index(req, res) {
     const { id: student_id } = req.params;
+    const { page = 1 } = req.query;
 
-    const checkins = await Checkin.findAll({
+    const checkins = await Checkin.findAndCountAll({
+      limit: PAGINATION_LIMIT,
+      offset: (page - 1) * PAGINATION_LIMIT,
       where: {
         student_id,
       },
+      order: [['id', 'DESC']],
     });
 
     return res.json({
-      checkins,
-      total: checkins.length,
+      checkins: checkins.rows,
+      pages: Math.ceil(checkins.count / PAGINATION_LIMIT),
+      total: checkins.count,
     });
   }
 
