@@ -33,16 +33,20 @@ class HelpOrderController {
   async show(req, res) {
     const { page = 1 } = req.query;
 
-    const helpOrders = await HelpOrder.findAll({
+    const helpOrders = await HelpOrder.findAndCountAll({
       limit: PAGINATION_LIMIT,
       offset: (page - 1) * PAGINATION_LIMIT,
       where: {
         student_id: req.params.id,
       },
-      attributes: ['id', 'question', 'answer', 'answer_at'],
+      attributes: ['id', 'question', 'answer', 'answer_at', 'createdAt'],
+      order: [['id', 'DESC']],
     });
 
-    return res.json(helpOrders);
+    return res.json({
+      help_orders: helpOrders.rows,
+      pages: Math.ceil(helpOrders.count / PAGINATION_LIMIT),
+    });
   }
 
   async store(req, res) {

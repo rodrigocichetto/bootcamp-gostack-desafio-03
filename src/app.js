@@ -30,6 +30,9 @@ class App {
       '/files',
       express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
     );
+    if (process.env.DELAY) {
+      this.server.use((req, res, next) => setTimeout(next, process.env.DELAY));
+    }
   }
 
   routes() {
